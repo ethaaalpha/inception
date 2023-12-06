@@ -10,3 +10,29 @@ services:
        - .env
     ports:
       - 443:443
+    volumes:
+      - wordpress:/var/www/
+  mariadb:
+    build:
+      context: requirements/mariadb/
+      args:
+        - DB_NAME=$DB_NAME
+        - DB_USER=$DB_USER
+        - DB_PASSWORD=$DB_PASSWORD
+        - DB_PASSWORD_ROOT=$DB_PASSWORD_ROOT
+    env_file:
+      - .env
+  wordpress:
+    build:
+      context: requirements/wordpress/
+      args:
+        - DB_NAME=$DB_NAME
+        - DB_USER=$DB_USER
+        - DB_PASSWORD=$DB_PASSWORD
+        - DB_HOST=$DB_HOST
+    volumes:
+      - wordpress:/var/www/
+  # dev:
+    # build: requirements/dev/
+volumes:
+  wordpress:
