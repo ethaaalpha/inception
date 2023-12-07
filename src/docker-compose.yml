@@ -12,6 +12,8 @@ services:
       - 443:443
     volumes:
       - wordpress:/var/www/
+    depends_on:
+      - wordpress
   mariadb:
     build:
       context: requirements/mariadb/
@@ -25,13 +27,12 @@ services:
   wordpress:
     build:
       context: requirements/wordpress/
-      args:
-        - DB_NAME=$DB_NAME
-        - DB_USER=$DB_USER
-        - DB_PASSWORD=$DB_PASSWORD
-        - DB_HOST=$DB_HOST
     volumes:
       - wordpress:/var/www/
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
   # dev:
     # build: requirements/dev/
 volumes:

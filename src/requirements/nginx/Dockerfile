@@ -4,7 +4,7 @@ FROM debian:bullseye
 ARG DOMAIN
 
 # install apt's needed
-RUN apt update && apt upgrade
+RUN apt update -y && apt upgrade -y
 RUN apt install -y nginx
 RUN apt install -y openssl
 

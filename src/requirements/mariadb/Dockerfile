@@ -8,7 +8,7 @@ ARG DB_PASSWORD_ROOT
 # SELECT user, host FROM mysql.user;
 
 # basic setup
-RUN apt update && apt upgrade
+RUN apt update -y && apt upgrade -y
 
 # maria db
 RUN apt install -y mariadb-server

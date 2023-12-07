@@ -1,23 +1,25 @@
 FROM debian:bullseye
 
-ARG DB_NAME
-ARG DB_USER
-ARG DB_PASSWORD
-ARG DB_HOST
-
 # basic setup && php-fpm
-RUN apt update && apt upgrade
+RUN apt update -y && apt upgrade -y
 
-# wordpress
-ADD https://fr.wordpress.org/latest-fr_FR.tar.gz .
-RUN mkdir -p /var/www/
-RUN tar -xvf latest-fr_FR.tar.gz -C /var/www
-ADD conf/wordpress.conf /var/www/wordpress/wp-config.php
-RUN rm /var/www/wordpress/wp-config-sample.php
-#php-fpm
+# wordpress cli to configure installation (without web)
+# openssl needed for wordpress cli download files
+RUN apt install -y openssl ca-certificates
+ADD https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar .
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+# wordpress dir location
+RUN mkdir -p /var/www/wordpress
+
+# php-fpm
 RUN mkdir -p /run/php/
 RUN apt install -y php-fpm php-mysqli
 ADD conf/php-fpm.conf /etc/php/7.4/fpm/pool.d/www.conf
 
+# setup wordpress with cli
+ADD conf/config.sh .
+
 EXPOSE 9000
-CMD ["php-fpm7.4", "-F", "-R"]
+CMD ["sh", "config.sh"]
