@@ -14,6 +14,8 @@ services:
       - wordpress:/var/www/
     depends_on:
       - wordpress
+    restart: on-failure
+
   mariadb:
     build:
       context: requirements/mariadb/
@@ -22,8 +24,13 @@ services:
         - DB_USER=$DB_USER
         - DB_PASSWORD=$DB_PASSWORD
         - DB_PASSWORD_ROOT=$DB_PASSWORD_ROOT
+    volumes:
+      - mariadb:/var/lib/mysql
     env_file:
       - .env
+    restart: on-failure
+
+
   wordpress:
     build:
       context: requirements/wordpress/
@@ -33,7 +40,16 @@ services:
       - .env
     depends_on:
       - mariadb
-  # dev:
-    # build: requirements/dev/
+    restart: on-failure
+    
 volumes:
   wordpress:
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: /home/ebillon/data/wordpress
+  mariadb:
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: /home/ebillon/data/mariadb

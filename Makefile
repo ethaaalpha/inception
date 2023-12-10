@@ -1,5 +1,23 @@
+PATH_TO_DATA = /home/ebillon/data/
+
 all:
-	docker compose -f src/docker-compose.yml up --build 
+	$(MAKE) up
+
+up:
+	mkdir -p $(PATH_TO_DATA)wordpress
+	mkdir -p $(PATH_TO_DATA)mariadb
+	docker compose -f srcs/docker-compose.yml up -d --build
+
+down:
+	docker compose -f srcs/docker-compose.yml down 
 
 clean:
-	sh todelete.sh
+	docker compose -f srcs/docker-compose.yml down --rmi local -v
+
+fclean:
+	docker compose -f srcs/docker-compose.yml down --rmi all -v --remove-orphans
+	rm -rf $(PATH_TO_DATA)*
+	
+
+re: fclean
+	$(MAKE) up
