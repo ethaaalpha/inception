@@ -13,7 +13,8 @@ services:
     volumes:
       - wordpress:/var/www/
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
     restart: on-failure
 
   mariadb:
@@ -41,6 +42,8 @@ services:
     depends_on:
       - mariadb
     restart: on-failure
+    healthcheck:
+      test: ["CMD", "cat", "/var/www/wordpress/wp-config.php"]
     
 volumes:
   wordpress:
