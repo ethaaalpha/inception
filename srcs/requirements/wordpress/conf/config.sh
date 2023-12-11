@@ -11,4 +11,4 @@ wp core --allow-root install 	--url=$DOMAIN --title=$WP_TITLE \
 
 wp user create --allow-root $WP_BASIC_USER $WP_BASIC_MAIL --user_pass=$WP_BASIC_PASSWORD
 
-php-fpm7.4 -F -R
+php-fpm7.4 -F
