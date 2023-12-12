@@ -12,9 +12,9 @@ RUN apt install -y openssl
 # create certificate for https
 # RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/ssl/certs/ebillon.42.fr.key -out /etc/ssl/private/nginx/ebillon.42.fr.crt -subj "/C=fr/ST=Rhone/L=Lyon/O=42/CN=ebillon.42.fr"
 
-# erase old config and copy the new one
-RUN rm /etc/nginx/nginx.conf
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+# add the conf site to sites-avaibles then symbolic link to sites-enables
+COPY conf/ebillon.conf /etc/nginx/sites-available/${DOMAIN}
+RUN ln -s /etc/nginx/sites-available/${DOMAIN} /etc/nginx/sites-enabled/${DOMAIN}
 COPY conf/${DOMAIN}.crt /etc/ssl/certs/
 COPY conf/${DOMAIN}.key /etc/ssl/keys/
 
