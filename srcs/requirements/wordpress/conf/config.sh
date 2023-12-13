@@ -11,6 +11,8 @@ if [ ! -f wp-config.php ]; then
 --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASSWORD --admin_email=$WP_ADMIN_MAIL
 
 	wp user create --allow-root $WP_BASIC_USER $WP_BASIC_MAIL --user_pass=$WP_BASIC_PASSWORD
+
+	chown www-data:www-data /var/www/wordpress/wp-content/uploads -R
 fi
 
 php-fpm7.4 -F
