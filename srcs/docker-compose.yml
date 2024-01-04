@@ -69,4 +69,5 @@ volumes:
 
 networks:
   customNetwork:
+    name: "42customNetwork"
     driver: bridge
